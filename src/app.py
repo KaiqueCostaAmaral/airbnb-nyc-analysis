@@ -5,7 +5,7 @@ import plotly.express as px
 import streamlit as st
 
 
-listings = pd.read_csv('data/raw/listings.csv')
+listings = pd.read_csv('../data/raw/listings.csv.gz')
 
 print(listings.isnull().sum())
 
