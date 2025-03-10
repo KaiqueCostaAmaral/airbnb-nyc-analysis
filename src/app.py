@@ -5,13 +5,29 @@ import plotly.express as px
 import streamlit as st
 
 
-listings = pd.read_csv('../data/raw/listings.csv.gz')
+listings = pd.read_csv('../data/raw/listings.csv' , sep=',')
+
+listings.columns = listings.columns.str.lower().str.replace(' ', '_')
+
+# Bloco de Testes
+
+print(listings.columns.tolist())
 
 print(listings.isnull().sum())
 
-listings_clean = listings.drop(columns=['coluna1', 'coluna2'])
+print(listings.dtypes)
 
-listings_clean.to_csv('data/processed/listings_clean.csv', index=False)
+listings = listings.dropna(axis=1, thresh=0.7 * len(listings))  # Remove colunas com mais de 30% de valores nulos
+listings = listings.fillna(0)  # Preenche valores nulos com 0
+
+listings['price'] = listings['price'].replace('[\$,]', '', regex=True).astype(float)
+
+colunas_para_remover = ['coluna1', 'coluna2']
+colunas_existentes = [coluna for coluna in colunas_para_remover if coluna in listings.columns]
+
+listings_clean = listings.drop(columns=colunas_existentes)
+
+listings_clean.to_csv('../data/processed/listings_clean.csv', index=False)
 
 sns.histplot(listings_clean['price'], bins=50, kde=True)
 plt.title('Distribuição de Preços das Listagens')
@@ -24,7 +40,7 @@ plt.show()
 st.title("Análise do Airbnb em Nova York")
 
 # Carregar dados
-listings = pd.read_csv('data/processed/listings_clean.csv')
+listings = pd.read_csv('../data/processed/listings_clean.csv')
 
 # Filtro interativo para bairros
 neighbourhoods = listings['neighbourhood'].unique()

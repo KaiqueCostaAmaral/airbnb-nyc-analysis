@@ -27,3 +27,9 @@ Os dados foram obtidos do [Inside Airbnb](http://insideairbnb.com/get-the-data/)
 
 ### Aplicativo Streamlit
 - [Painel Interativo do Airbnb em Nova York](https://seu-app-streamlit.com)
+
+
+## Inicialização
+- `python app.py` para iniciar o grafico local
+
+- `streamlit run app.py` para iniciar o grafico Web
